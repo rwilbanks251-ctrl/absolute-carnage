@@ -239,7 +239,7 @@
       box.append(el("article", { class: "hero" },
         el("div", { class: "htop" },
           el("div", {}, e.type === "tournament" ? el("div", { class: "kick", text: "Next tournament" }) : null,
-            el("div", { class: "htitle", text: e.type === "tournament" ? e.title : "Next Practice" }),
+            el("div", { class: "htitle", text: e.type === "tournament" ? e.title : "Practice" }),
             el("div", { class: "hwhen", text: WD[d.getDay()] + ", " + MONTHS[d.getMonth()] + " " + d.getDate() + (e.start_time ? " · " + fmtTime(e.start_time) : "") })),
           el("div", { class: "count", text: rel(d) })),
         el("div", { class: "hbody" },
