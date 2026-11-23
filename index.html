@@ -54,6 +54,17 @@ nav::-webkit-scrollbar{display:none}
 nav button{background:none;border:0;color:#a39aa8;font-family:var(--f-cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 12px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
 nav button[aria-selected="true"]{color:var(--band-ink);border-bottom-color:var(--carnage)}
 nav .buzztab{color:var(--orange)}
+/* phones: tabs become an app-style bar along the bottom */
+@media (max-width:640px){
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:20;margin:0;background:#000;border-top:1px solid #222;
+      justify-content:space-around;gap:0;padding:0 max(4px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(4px,env(safe-area-inset-left,0px))}
+  nav button{flex:1 1 0;min-width:0;font-size:11px;letter-spacing:.04em;padding:14px 2px 12px;border-bottom:0;border-top:3px solid transparent}
+  nav button[aria-selected="true"]{border-top-color:var(--carnage)}
+  nav button .n{display:none}
+  main .wrap{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+  .band .wrap{padding-bottom:10px}
+  .buzzframe{height:calc(100dvh - 190px)}
+}
 .buzzframe{display:block;width:100%;height:calc(100dvh - 190px);min-height:420px;border:0;border-radius:10px;background:#000}
 body.buzz main .wrap{padding-block:8px 8px}
 nav .navlink{color:var(--orange);font-family:var(--f-cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 12px;white-space:nowrap;text-decoration:none;border-bottom:3px solid transparent}
