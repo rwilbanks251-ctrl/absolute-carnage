@@ -59,6 +59,9 @@ nav .buzztab{color:var(--orange)}
   padding:26px 16px calc(26px + env(safe-area-inset-bottom,0px));margin-top:8px}
 .site-foot .logo{height:120px;width:auto;max-width:70vw;display:block}
 body.is-login .site-foot{display:none}
+.site-foot .footnav{align-self:stretch;max-width:1080px;width:100%;margin:-26px auto 14px;border-bottom:1px solid #1d1a1f}
+.site-foot .footnav button[aria-selected="true"]{border-bottom-color:var(--carnage)}
+
 body:not(.is-login){display:flex;flex-direction:column;min-height:100dvh}
 body:not(.is-login) main{flex:1 0 auto}
 
@@ -339,6 +342,14 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
 </main>
 
 <footer class="site-foot" id="siteFoot">
+  <nav class="footnav" aria-label="Sections">
+    <button type="button" data-view="home">Home</button>
+    <button type="button" data-view="schedule">Schedule</button>
+    <button type="button" data-view="bulletin">Bulletin</button>
+    <button type="button" data-view="attendance">Attendance</button>
+    <button type="button" data-view="roster">Roster</button>
+    <button type="button" data-view="buzzer" class="buzztab">Buzzer</button>
+  </nav>
   <img src="logo.png" alt="Absolute Carnage" class="logo" id="logo" onerror="this.hidden=true;document.getElementById('wordmark').hidden=false">
   <h1 id="wordmark" hidden>ABSOLUTE <span>CARNAGE</span></h1>
   <button class="who" id="who" hidden aria-label="My account"><b id="whoName"></b><span class="role" id="whoRole"></span></button>
@@ -438,8 +449,8 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
   <div class="dactions"><button type="button" class="btn ghost" id="meOut">Log out</button><div class="spacer"></div><button type="button" class="btn ghost" data-close>Close</button><button type="submit" class="btn" id="meSave">Change password</button></div>
 </form></dialog>
 
-<script src="config.js?v=12"></script>
+<script src="config.js?v=13"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="app.js?v=12"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>
