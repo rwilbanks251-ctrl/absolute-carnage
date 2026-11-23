@@ -35,15 +35,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--orange);outline-offset:2px}
 
 .band{background:var(--band);color:var(--band-ink);position:relative;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
-.band::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.9;
-  background:
-    radial-gradient(circle at 88% 30%,var(--carnage) 0 26px,transparent 27px),
-    radial-gradient(circle at 93% 62%,var(--carnage) 0 9px,transparent 10px),
-    radial-gradient(circle at 81% 70%,var(--carnage) 0 5px,transparent 6px),
-    radial-gradient(circle at 97% 18%,var(--carnage) 0 4px,transparent 5px),
-    radial-gradient(ellipse 60px 8px at 78% 46%,var(--carnage) 0 99%,transparent 100%),
-    radial-gradient(circle at 72% 22%,var(--orange) 0 6px,transparent 7px),
-    radial-gradient(circle at 75% 85%,var(--orange) 0 3px,transparent 4px)}
 .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .band .wrap{padding-block:22px 0;position:relative;z-index:1}
 .brand{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
