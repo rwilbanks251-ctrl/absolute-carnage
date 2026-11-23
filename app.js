@@ -358,7 +358,7 @@
   };
   function syncFieldUi() {
     const practice = $("#evType").value === "practice", f = $("#evField").value;
-    $("#evPaintWrap").hidden = !practice; $("#evFieldWrap").hidden = !practice;
+    $("#evPaintWrap").hidden = !practice; $("#evFieldWrap").hidden = !practice; $("#evTitleWrap").hidden = practice;
     $("#evLocWrap").hidden = practice && f !== "other";
     if (practice && FIELDS[f]) $("#evLoc").value = FIELDS[f];
   }
@@ -383,7 +383,9 @@
     ev.preventDefault();
     const body = { type: $("#evType").value, title: $("#evTitle").value.trim(), date: $("#evDate").value, start_time: $("#evTime").value || null,
                    location: $("#evLoc").value.trim() || null, lodging: $("#evStay").value.trim() || null, lodging_url: $("#evStayUrl").value.trim() || null, notes: $("#evNotes").value.trim() || null };
-    if (!body.title || !body.date) { $("#evErr").textContent = "Add a title and a date."; return; }
+    if (body.type === "practice") body.title = "Practice";   // practices are always just "Practice"
+    if (!body.title) { $("#evErr").textContent = "Add the tournament name."; return; }
+    if (!body.date) { $("#evErr").textContent = "Add a date."; return; }
     const paint = $("#evPaint").value.trim();
     if (body.type === "practice") {
       if (paint === "") { $("#evErr").textContent = "Enter how many cases of paint to buy for this practice."; return; }
