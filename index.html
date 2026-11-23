@@ -305,7 +305,7 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
   <h3 id="eventDlgTitle">Add event</h3>
   <div class="row">
     <label for="evType">Type<select id="evType"><option value="practice">Practice</option><option value="tournament">Tournament</option></select></label>
-    <label for="evTitle">Title<input id="evTitle" maxlength="80" placeholder="Sunday practice" required></label>
+    <label for="evTitle" id="evTitleWrap">Tournament name<input id="evTitle" maxlength="80" placeholder="NGXL Season 5 Episode 1"></label>
   </div>
   <div class="row">
     <label for="evDate">Date<input id="evDate" type="date" required></label>
@@ -380,8 +380,8 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
   <div class="dactions"><button type="button" class="btn ghost" id="meOut">Log out</button><div class="spacer"></div><button type="button" class="btn ghost" data-close>Close</button><button type="submit" class="btn" id="meSave">Change password</button></div>
 </form></dialog>
 
-<script src="config.js?v=4"></script>
+<script src="config.js?v=5"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
