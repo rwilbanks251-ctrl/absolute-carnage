@@ -108,10 +108,13 @@
   // ---------- tabs ----------
   try { const v = localStorage.getItem("ac.view"); if (v) S.view = v; } catch (e) {}
   function showView(v) {
-    if (!["home","schedule","bulletin","attendance","roster"].includes(v)) v = "home";
+    if (!["home","schedule","bulletin","attendance","roster","buzzer"].includes(v)) v = "home";
     S.view = v;
     document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.view === v)));
-    for (const s of ["home","schedule","bulletin","attendance","roster"]) $("#view-" + s).hidden = s !== v;
+    for (const s of ["home","schedule","bulletin","attendance","roster","buzzer"]) $("#view-" + s).hidden = s !== v;
+    document.body.classList.toggle("buzz", v === "buzzer");
+    // the buzzer page loads inside the site the first time its tab is opened
+    if (v === "buzzer" && !$("#buzzFrame").src) $("#buzzFrame").src = "https://rwilbanks251-ctrl.github.io/baller-buzzer/";
     try { localStorage.setItem("ac.view", v); } catch (e) {}
   }
   document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => showView(b.dataset.view)));
