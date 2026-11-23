@@ -113,8 +113,8 @@
     document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.view === v)));
     for (const s of ["home","schedule","bulletin","attendance","roster","buzzer"]) $("#view-" + s).hidden = s !== v;
     document.body.classList.toggle("buzz", v === "buzzer");
-    // the buzzer page loads inside the site the first time its tab is opened
-    if (v === "buzzer" && !$("#buzzFrame").src) $("#buzzFrame").src = "https://rwilbanks251-ctrl.github.io/baller-buzzer/";
+    // the buzzer page loads inside the site the first time its tab is opened, already unlocked
+    if (v === "buzzer" && !$("#buzzFrame").src) openBuzzer();
     try { localStorage.setItem("ac.view", v); } catch (e) {}
   }
   document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => showView(b.dataset.view)));
@@ -122,6 +122,32 @@
     S.filter = b.dataset.f; document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); render();
   }));
   showView(S.view);
+
+  // ---------- buzzer: unlock it for logged-in players ----------
+  // The buzzer page is encrypted; its lock screen auto-opens when localStorage holds the derived key
+  // ("nxl_lock_key"). Both sites share the github.io origin, so we derive that key here from the
+  // password kept in the team database (logged-in players only) and the buzzer's current salt.
+  const BUZZ_URL = "https://rwilbanks251-ctrl.github.io/baller-buzzer/";
+  async function openBuzzer() {
+    const frame = $("#buzzFrame");
+    try {
+      const page = await (await fetch(BUZZ_URL + "?nc=" + Date.now(), { cache: "no-store" })).text();
+      const salt = (page.match(/const SALT="([^"]+)"/) || [])[1], iter = Number((page.match(/ITER=(\d+)/) || [])[1]);
+      let stored = null; try { stored = JSON.parse(localStorage.getItem("ac.buzz") || "null"); } catch (e) {}
+      if (salt && iter && !(stored && stored.salt === salt && localStorage.getItem("nxl_lock_key"))) {
+        const { data } = await sb.from("app_config").select("value").eq("key", "buzzer_password").maybeSingle();
+        if (data && data.value) {
+          const b64 = (s) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+          const km = await crypto.subtle.importKey("raw", new TextEncoder().encode(data.value), "PBKDF2", false, ["deriveKey"]);
+          const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(salt), iterations: iter, hash: "SHA-256" },
+            km, { name: "AES-GCM", length: 256 }, true, ["decrypt"]);
+          localStorage.setItem("nxl_lock_key", JSON.stringify(await crypto.subtle.exportKey("jwk", key)));
+          localStorage.setItem("ac.buzz", JSON.stringify({ salt }));
+        }
+      }
+    } catch (e) { /* worst case the buzzer shows its own lock screen */ }
+    frame.src = BUZZ_URL;
+  }
 
   // ---------- data ----------
   async function loadTable(t) {
@@ -216,6 +242,59 @@
     } catch (x) { return { note: "Forecast unavailable right now" }; }
   }
 
+  // ---------- live weather effects (canvas): rain streaks, snow, drifting clouds, sun motes, storm flashes, fog ----------
+  function startWxFx(tile, kind) {
+    const cv = document.createElement("canvas"); cv.className = "wxfx"; cv.setAttribute("aria-hidden", "true");
+    tile.prepend(cv);
+    const ctx = cv.getContext("2d"), still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const size = () => { const r = tile.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+    size();
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const heavy = kind === "storm";
+    const drops = (kind === "rain" || heavy) ? Array.from({ length: heavy ? 90 : 60 }, () => ({ x: rnd(-20, W + 20), y: rnd(-H, H), l: rnd(9, 20), v: rnd(heavy ? 8 : 6, heavy ? 13 : 10), a: rnd(.18, .55) })) : [];
+    const flakes = kind === "snow" ? Array.from({ length: 45 }, () => ({ x: rnd(0, W), y: rnd(0, H), r: rnd(.8, 2.6), v: rnd(.25, .8), p: rnd(0, 6.28) })) : [];
+    const motes = kind === "sun" ? Array.from({ length: 22 }, () => ({ x: rnd(0, W), y: rnd(0, H), r: rnd(.6, 1.8), v: rnd(.1, .35), p: rnd(0, 6.28) })) : [];
+    const clouds = (kind === "cloud" || kind === "rain" || heavy) ? Array.from({ length: 3 }, (_, i) => ({ x: rnd(-60, W), y: rnd(6, H * .45), s: rnd(.7, 1.25), v: rnd(.12, .3) * (i % 2 ? 1 : .7) })) : [];
+    const fog = kind === "fog" ? Array.from({ length: 4 }, (_, i) => ({ y: H * (.2 + i * .2), o: rnd(0, W), v: rnd(.15, .35) })) : [];
+    let flash = 0, t = 0, raf = 0;
+    function cloud(c) {
+      ctx.save(); ctx.translate(c.x, c.y); ctx.scale(c.s, c.s);
+      const g = ctx.createRadialGradient(40, 18, 4, 40, 18, 46); g.addColorStop(0, "rgba(255,255,255,.30)"); g.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(40, 18, 46, 20, 0, 0, 6.29); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(22, 22, 26, 14, 0, 0, 6.29); ctx.fill(); ctx.beginPath(); ctx.ellipse(62, 22, 28, 14, 0, 0, 6.29); ctx.fill();
+      ctx.restore();
+    }
+    function frame() {
+      if (!tile.isConnected) { cancelAnimationFrame(raf); return; }
+      t++; ctx.clearRect(0, 0, W, H);
+      if (kind === "sun") {                       // soft glow + slowly turning light rays + rising motes
+        const gx = W - 24, gy = 18, g = ctx.createRadialGradient(gx, gy, 0, gx, gy, 90);
+        g.addColorStop(0, "rgba(255,244,200,.55)"); g.addColorStop(1, "rgba(255,244,200,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+        ctx.save(); ctx.translate(gx, gy); ctx.rotate(t * .0025);
+        for (let i = 0; i < 12; i++) { ctx.rotate(Math.PI / 6); ctx.fillStyle = "rgba(255,255,255,.07)"; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(160, -10); ctx.lineTo(160, 10); ctx.fill(); }
+        ctx.restore();
+        motes.forEach(m => { m.y -= m.v; m.x += Math.sin(t * .01 + m.p) * .2; if (m.y < -4) { m.y = H + 4; m.x = rnd(0, W); }
+          ctx.fillStyle = "rgba(255,255,255," + (.35 + .3 * Math.sin(t * .03 + m.p)) + ")"; ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, 6.29); ctx.fill(); });
+      }
+      clouds.forEach(c => { c.x += c.v; if (c.x > W + 10) c.x = -110 * c.s; cloud(c); });
+      if (drops.length) {
+        ctx.lineCap = "round";
+        drops.forEach(d => { d.y += d.v; d.x -= d.v * .22; if (d.y > H + 20) { d.y = rnd(-40, -10); d.x = rnd(0, W + 40); }
+          ctx.strokeStyle = "rgba(200,225,255," + d.a + ")"; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d.x + d.l * .22, d.y - d.l); ctx.stroke(); });
+      }
+      flakes.forEach(f => { f.y += f.v; f.x += Math.sin(t * .02 + f.p) * .35; if (f.y > H + 4) { f.y = -4; f.x = rnd(0, W); }
+        ctx.fillStyle = "rgba(255,255,255,.85)"; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 6.29); ctx.fill(); });
+      fog.forEach(b => { b.o = (b.o + b.v) % (W * 2); const g = ctx.createLinearGradient(b.o - W, 0, b.o + W, 0);
+        g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(.5, "rgba(255,255,255,.22)"); g.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = g; ctx.fillRect(0, b.y - 12, W, 24); });
+      if (heavy) { if (flash <= 0 && Math.random() < .006) flash = 14; if (flash > 0) { ctx.fillStyle = "rgba(235,230,255," + (flash % 7 > 3 ? .35 : .12) + ")"; ctx.fillRect(0, 0, W, H); flash--; } }
+      if (!still) raf = requestAnimationFrame(frame);
+    }
+    frame();
+    window.addEventListener("resize", size, { passive: true });
+  }
+
   // ---------- home (landing) ----------
   function nextEvent() {
     const now = Date.now();
@@ -238,6 +317,7 @@
           el("span", { text: [w.text, w.rain != null ? w.rain + "% rain" : null].filter(Boolean).join(" · ") }));
         wxTile.className = "tile wx wx-" + w.kind;
         wxTile.hidden = false;
+        startWxFx(wxTile, w.kind);
       });
       box.append(el("article", { class: "hero" },
         el("div", { class: "htop" },
