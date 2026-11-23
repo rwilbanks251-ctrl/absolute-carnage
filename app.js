@@ -117,7 +117,10 @@
     if (v === "buzzer" && !$("#buzzFrame").src) openBuzzer();
     try { localStorage.setItem("ac.view", v); } catch (e) {}
   }
-  document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => showView(b.dataset.view)));
+  document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => {
+    showView(b.dataset.view);
+    if (b.closest(".footnav")) window.scrollTo({ top: 0, behavior: "smooth" });   // bottom tabs jump back to the top
+  }));
   document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
     S.filter = b.dataset.f; document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); render();
   }));
