@@ -36,36 +36,29 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 .band{background:var(--band);color:var(--band-ink);position:relative;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
 .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.band .wrap{padding-block:12px 0;position:relative;z-index:1}
-.band{background:#000 !important}
-.brand{display:flex;align-items:center;justify-content:center;position:relative;min-height:96px}
-.brand .who{position:absolute;right:0;top:50%;transform:translateY(-50%);max-width:34vw}
-h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,6vw,52px);line-height:.95;margin:0;letter-spacing:.02em}
+.band .wrap{padding-block:0;position:relative;z-index:1}
+.band{background:#000 !important;position:sticky;top:0;z-index:20;border-bottom:1px solid #1d1a1f}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,6vw,52px);line-height:.95;margin:0;letter-spacing:.02em;color:#efeaf0}
 h1 span{color:var(--carnage)}
-.brandmark{display:flex;align-items:center;gap:12px;min-width:0}
-.logo{height:104px;width:auto;max-width:56vw;display:block}
-@media (max-width:420px){.logo{height:88px}.brand .who{padding:5px 9px;font-size:13px}.brand .who .role{display:none}}
-.tag{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:#a39aa8;margin-top:6px}
-.who{display:flex;align-items:center;gap:10px;font-family:var(--f-cond);font-size:15px;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:999px;max-width:100%;border:0;color:inherit;cursor:pointer}
+.who{display:flex;align-items:center;gap:10px;font-family:var(--f-cond);font-size:15px;background:rgba(255,255,255,.08);padding:8px 14px;border-radius:999px;max-width:100%;border:0;color:#efeaf0;cursor:pointer}
 .who b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .who .role{font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:var(--orange)}
-nav{display:flex;gap:2px;margin-top:4px;overflow-x:auto;scrollbar-width:none;justify-content:safe center}
-nav::-webkit-scrollbar{display:none}
-nav button{background:none;border:0;color:#a39aa8;font-family:var(--f-cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 12px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
-nav button[aria-selected="true"]{color:var(--band-ink);border-bottom-color:var(--carnage)}
+/* top: every tab visible at once, no sideways scrolling */
+nav{display:flex;margin:0;gap:0;justify-content:space-between}
+nav button{flex:1 1 0;min-width:0;text-align:center;background:none;border:0;color:#a39aa8;font-family:var(--f-cond);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.08em;padding:14px 4px 11px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:clip}
+nav button[aria-selected="true"]{color:#fff;border-bottom-color:var(--carnage)}
 nav .buzztab{color:var(--orange)}
-/* phones: tabs become an app-style bar along the bottom */
 @media (max-width:640px){
-  nav{position:fixed;left:0;right:0;bottom:0;z-index:20;margin:0;background:#000;border-top:1px solid #222;
-      justify-content:space-around;gap:0;padding:0 max(4px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(4px,env(safe-area-inset-left,0px))}
-  nav button{flex:1 1 0;min-width:0;font-size:11px;letter-spacing:.04em;padding:14px 2px 12px;border-bottom:0;border-top:3px solid transparent}
-  nav button[aria-selected="true"]{border-top-color:var(--carnage)}
+  nav button{font-size:11px;letter-spacing:.03em;padding:14px 1px 11px}
   nav button .n{display:none}
-  main .wrap{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
-  .band .wrap{padding-bottom:10px}
-  .buzzframe{height:calc(100dvh - 190px)}
 }
-.buzzframe{display:block;width:100%;height:calc(100dvh - 190px);min-height:420px;border:0;border-radius:10px;background:#000}
+@media (max-width:350px){nav button{font-size:10px;letter-spacing:0}}
+/* bottom: logo footer */
+.site-foot{background:#000;color:#efeaf0;display:flex;flex-direction:column;align-items:center;gap:12px;
+  padding:26px 16px calc(26px + env(safe-area-inset-bottom,0px));margin-top:8px}
+.site-foot .logo{height:120px;width:auto;max-width:70vw;display:block}
+body.is-login .site-foot{display:none}
+.buzzframe{display:block;width:100%;height:calc(100dvh - 72px);min-height:420px;border:0;border-radius:10px;background:#000}
 body.buzz main .wrap{padding-block:8px 8px}
 nav .navlink{color:var(--orange);font-family:var(--f-cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 12px;white-space:nowrap;text-decoration:none;border-bottom:3px solid transparent}
 nav .navlink:hover{border-bottom-color:var(--orange)}
@@ -258,13 +251,6 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
 
 <header class="band">
   <div class="wrap">
-    <div class="brand">
-      <div class="brandmark">
-        <img src="logo.png" alt="Absolute Carnage" class="logo" id="logo" onerror="this.hidden=true;document.getElementById('wordmark').hidden=false">
-        <h1 id="wordmark" hidden>ABSOLUTE <span>CARNAGE</span></h1>
-      </div>
-      <button class="who" id="who" hidden aria-label="My account"><b id="whoName"></b><span class="role" id="whoRole"></span></button>
-    </div>
     <nav role="tablist" aria-label="Sections" id="tabs" hidden>
       <button role="tab" aria-selected="true" data-view="home">Home</button>
       <button role="tab" aria-selected="false" data-view="schedule">Schedule<span class="n" id="nSched"></span></button>
@@ -343,6 +329,13 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
     </div>
   </div>
 </main>
+
+<footer class="site-foot" id="siteFoot">
+  <img src="logo.png" alt="Absolute Carnage" class="logo" id="logo" onerror="this.hidden=true;document.getElementById('wordmark').hidden=false">
+  <h1 id="wordmark" hidden>ABSOLUTE <span>CARNAGE</span></h1>
+  <button class="who" id="who" hidden aria-label="My account"><b id="whoName"></b><span class="role" id="whoRole"></span></button>
+</footer>
+
 
 <!-- add / edit event -->
 <dialog id="eventDlg"><form id="eventForm">
@@ -424,8 +417,8 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
   <div class="dactions"><button type="button" class="btn ghost" id="meOut">Log out</button><div class="spacer"></div><button type="button" class="btn ghost" data-close>Close</button><button type="submit" class="btn" id="meSave">Change password</button></div>
 </form></dialog>
 
-<script src="config.js?v=10"></script>
+<script src="config.js?v=11"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="app.js?v=10"></script>
+<script src="app.js?v=11"></script>
 </body>
 </html>
