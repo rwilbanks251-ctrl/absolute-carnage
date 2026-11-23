@@ -223,12 +223,13 @@
       const d = evDate(e), rs = S.rsvps.filter(r => r.event_id === e.id), mine = myRsvp(e.id);
       const ins = rs.filter(r => r.status === "in").length, outs = rs.filter(r => r.status === "out").length;
       const pend = rsvpPending && rsvpPending.eid === e.id, shown = pend ? "out" : (mine && mine.status);
-      const wxTile = el("div", { class: "tile" }, el("small", { text: "Weather" }), el("b", { text: "…" }), el("span", { text: "Checking the forecast" }));
+      // Weather only shows when there is a real forecast (no placeholder when it's too far out or unavailable).
+      const wxTile = el("div", { class: "tile", hidden: true });
       weatherFor(e).then(w => {
-        if (!wxTile.isConnected) return;
-        wxTile.replaceChildren(el("small", { text: "Weather" }),
-          w.note ? el("span", { text: w.note }) : el("b", { text: w.hi + "° / " + w.lo + "°" }),
-          w.note ? null : el("span", { text: [w.text, w.rain != null ? w.rain + "% rain" : null].filter(Boolean).join(" · ") }));
+        if (!wxTile.isConnected || !w || w.note) { wxTile.remove(); return; }
+        wxTile.replaceChildren(el("small", { text: "Weather" }), el("b", { text: w.hi + "° / " + w.lo + "°" }),
+          el("span", { text: [w.text, w.rain != null ? w.rain + "% rain" : null].filter(Boolean).join(" · ") }));
+        wxTile.hidden = false;
       });
       box.append(el("article", { class: "hero" },
         el("div", { class: "htop" },
@@ -271,12 +272,18 @@
     if (up.length) box.append(el("h2", { text: "Coming up" }), el("div", { class: "grid" }, up.map(e => eventCard(e, false))));
     if (past.length) box.append(el("h2", { text: "Past" }), el("div", { class: "grid" }, past.slice(0, 12).map(e => eventCard(e, true))));
   }
+  // One Directions button: Apple Maps on iPhone/iPad/Mac, the phone's own map app on Android, Google Maps elsewhere.
+  function directionsHref(addr) {
+    const q = encodeURIComponent(addr), ua = navigator.userAgent;
+    if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) || /Macintosh/.test(ua)) return "https://maps.apple.com/?daddr=" + q;
+    if (/Android/.test(ua)) return "geo:0,0?q=" + q;
+    return "https://www.google.com/maps/dir/?api=1&destination=" + q;
+  }
   function mapRow(kind, addr, link) {
     if (!addr && !link) return null;
     const ext = (href, txt) => el("a", { class: "mapbtn", href, target: "_blank", rel: "noopener noreferrer" }, txt);
     return el("div", { class: "maprow" }, el("span", { class: "maplabel", text: kind }), addr ? el("span", { class: "meta", text: addr }) : null,
-      addr ? ext("https://maps.apple.com/?q=" + encodeURIComponent(addr), "Apple Maps") : null,
-      addr ? ext("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(addr), "Google Maps") : null,
+      addr ? ext(directionsHref(addr), "Directions") : null,
       link && /^https:\/\//i.test(link) ? ext(link, "Booking ↗") : null);
   }
   function eventCard(e, isPast) {
