@@ -123,6 +123,25 @@
   }));
   showView(S.view);
 
+  // ---------- add to home screen ----------
+  // Android/Chrome: one-tap install via the browser's own prompt. iPhone: Safari has no install API, so show the 2 taps.
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+  let installEvt = null;
+  const installBtns = () => [$("#installBtn"), $("#installLink")];
+  const showInstall = (on) => installBtns().forEach(b => { if (b) b.hidden = !on || standalone; });
+  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; showInstall(true); });
+  window.addEventListener("appinstalled", () => { installEvt = null; showInstall(false); });
+  if (isIOS) showInstall(true);
+  installBtns().forEach(b => b && b.addEventListener("click", async () => {
+    if (installEvt) { installEvt.prompt(); try { await installEvt.userChoice; } catch (e) {} installEvt = null; showInstall(false); return; }
+    if (isIOS) {
+      const safari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS|GSA/.test(navigator.userAgent);
+      $("#iosNote").hidden = safari; $("#iosDlg").showModal();
+    }
+  }));
+
   // ---------- buzzer: unlock it for logged-in players ----------
   // The buzzer page is encrypted; its lock screen auto-opens when localStorage holds the derived key
   // ("nxl_lock_key"). Both sites share the github.io origin, so we derive that key here from the
