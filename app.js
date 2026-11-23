@@ -204,8 +204,12 @@
         "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&temperature_unit=fahrenheit&timezone=auto&start_date=" + e.date + "&end_date=" + e.date;
       const d = (await (await fetch(u)).json()).daily;
       if (!d || !d.time || !d.time.length) return (wxCache[key] = { note: "No forecast yet" });
+      const code = d.weather_code[0];
+      const kind = code >= 95 ? "storm" : (code >= 71 && code <= 77) || code === 85 || code === 86 ? "snow"
+        : (code >= 51 && code <= 67) || (code >= 80 && code <= 82) ? "rain" : code === 45 || code === 48 ? "fog"
+        : code <= 1 ? "sun" : "cloud";
       return (wxCache[key] = { hi: Math.round(d.temperature_2m_max[0]), lo: Math.round(d.temperature_2m_min[0]),
-        rain: d.precipitation_probability_max[0], text: WX[d.weather_code[0]] || "", place: g.name });
+        rain: d.precipitation_probability_max[0], text: WX[code] || "", place: g.name, kind });
     } catch (x) { return { note: "Forecast unavailable right now" }; }
   }
 
@@ -229,6 +233,7 @@
         if (!wxTile.isConnected || !w || w.note) { wxTile.remove(); return; }
         wxTile.replaceChildren(el("small", { text: "Weather" }), el("b", { text: w.hi + "° / " + w.lo + "°" }),
           el("span", { text: [w.text, w.rain != null ? w.rain + "% rain" : null].filter(Boolean).join(" · ") }));
+        wxTile.className = "tile wx wx-" + w.kind;
         wxTile.hidden = false;
       });
       box.append(el("article", { class: "hero" },
