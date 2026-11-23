@@ -200,6 +200,7 @@ table.rec tr:last-child td{border-bottom:0}
 .tile.wx::before,.tile.wx::after{content:"";position:absolute;z-index:1;pointer-events:none;border-radius:50%;filter:blur(28px);opacity:.85}
 .tile.wx::before{width:150px;height:150px;left:-40px;top:-50px;background:var(--wx-a);animation:wxglow1 16s ease-in-out infinite alternate}
 .tile.wx::after{width:170px;height:170px;right:-60px;bottom:-80px;background:var(--wx-b);animation:wxglow2 20s ease-in-out infinite alternate}
+.tile.wx canvas.wxfx{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
 .wx-sun  {--wx-base:#c2561a;--wx-a:#ffb347;--wx-b:#ff6a3d}
 .wx-cloud{--wx-base:#3f4b59;--wx-a:#7f93a8;--wx-b:#56657a}
 .wx-rain {--wx-base:#18283d;--wx-a:#2f6fb5;--wx-b:#1d4f86}
@@ -423,8 +424,8 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
   <div class="dactions"><button type="button" class="btn ghost" id="meOut">Log out</button><div class="spacer"></div><button type="button" class="btn ghost" data-close>Close</button><button type="submit" class="btn" id="meSave">Change password</button></div>
 </form></dialog>
 
-<script src="config.js?v=9"></script>
+<script src="config.js?v=10"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="app.js?v=9"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>
