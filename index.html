@@ -7,8 +7,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Carnage">
 <title>Absolute Carnage</title>
-<link rel="icon" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
 <style>
@@ -58,6 +59,9 @@ nav .buzztab{color:var(--orange)}
   padding:26px 16px calc(26px + env(safe-area-inset-bottom,0px));margin-top:8px}
 .site-foot .logo{height:120px;width:auto;max-width:70vw;display:block}
 body.is-login .site-foot{display:none}
+.steps{margin:0;padding-left:20px;font-size:15px;display:flex;flex-direction:column;gap:8px}
+/* login screen gets the install button too */
+.login .installlink{background:none;border:0;color:#b9b0bd;text-decoration:underline;cursor:pointer;font-size:13px;padding:4px 0;align-self:center}
 .buzzframe{display:block;width:100%;height:calc(100dvh - 72px);min-height:420px;border:0;border-radius:10px;background:#000}
 body.buzz main .wrap{padding-block:8px 8px}
 nav .navlink{color:var(--orange);font-family:var(--f-cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 12px;white-space:nowrap;text-decoration:none;border-bottom:3px solid transparent}
@@ -273,6 +277,7 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
       <div class="formerr" id="liErr"></div>
       <button class="btn wide" type="submit" id="liBtn">Log in</button>
       <div class="meta">Forgot your password? Ask Kevin, Mike or Rob to reset it.</div>
+      <button type="button" class="installlink" id="installLink" hidden>Add to Home Screen</button>
     </form>
 
     <div id="app" hidden>
@@ -334,7 +339,20 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
   <img src="logo.png" alt="Absolute Carnage" class="logo" id="logo" onerror="this.hidden=true;document.getElementById('wordmark').hidden=false">
   <h1 id="wordmark" hidden>ABSOLUTE <span>CARNAGE</span></h1>
   <button class="who" id="who" hidden aria-label="My account"><b id="whoName"></b><span class="role" id="whoRole"></span></button>
+  <button class="btn" id="installBtn" hidden>Add to Home Screen</button>
 </footer>
+
+<!-- add to home screen: iPhone steps -->
+<dialog id="iosDlg"><form method="dialog">
+  <h3>Add to Home Screen</h3>
+  <ol class="steps">
+    <li>Tap the <b>Share</b> button at the bottom of Safari (the square with the arrow pointing up).</li>
+    <li>Scroll down and tap <b>Add to Home Screen</b>.</li>
+    <li>Tap <b>Add</b>. The Carnage icon shows up on your home screen.</li>
+  </ol>
+  <div class="meta" id="iosNote">On iPhone this only works in Safari. If you opened the link in another app, open it in Safari first.</div>
+  <div class="dactions"><button type="submit" class="btn">Got it</button></div>
+</form></dialog>
 
 
 <!-- add / edit event -->
@@ -417,8 +435,8 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
   <div class="dactions"><button type="button" class="btn ghost" id="meOut">Log out</button><div class="spacer"></div><button type="button" class="btn ghost" data-close>Close</button><button type="submit" class="btn" id="meSave">Change password</button></div>
 </form></dialog>
 
-<script src="config.js?v=11"></script>
+<script src="config.js?v=12"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
