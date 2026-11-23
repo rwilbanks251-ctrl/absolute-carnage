@@ -233,8 +233,8 @@
       });
       box.append(el("article", { class: "hero" },
         el("div", { class: "htop" },
-          el("div", {}, el("div", { class: "kick", text: e.type === "tournament" ? "Next tournament" : "Next practice" }),
-            el("div", { class: "htitle", text: e.title }),
+          el("div", {}, e.type === "tournament" ? el("div", { class: "kick", text: "Next tournament" }) : null,
+            el("div", { class: "htitle", text: e.type === "tournament" ? e.title : "Next Practice" }),
             el("div", { class: "hwhen", text: WD[d.getDay()] + ", " + MONTHS[d.getMonth()] + " " + d.getDate() + (e.start_time ? " · " + fmtTime(e.start_time) : "") })),
           el("div", { class: "count", text: rel(d) })),
         el("div", { class: "hbody" },
@@ -299,7 +299,7 @@
       el("div", { class: "ebody" },
         el("div", { class: "etop" }, el("span", { class: "pill" + (e.type === "tournament" ? " t" : ""), text: e.type === "tournament" ? "Tournament" : "Practice" }),
           el("span", { class: "when", text: [rel(d), fmtTime(e.start_time)].filter(Boolean).join(" · ") })),
-        el("h3", { class: "etitle", text: e.title }),
+        e.type === "tournament" ? el("h3", { class: "etitle", text: e.title }) : null,   // practices: the "Practice" pill is enough
         mapRow("Field", e.location), mapRow("Stay", e.lodging, e.lodging_url),
         e.type === "practice" && e.paint_cases != null ? el("div", { class: "meta", text: "Paint to buy: " + e.paint_cases + (e.paint_cases === 1 ? " case" : " cases") }) : null,
         e.notes ? el("div", { class: "notes", text: e.notes }) : null,
