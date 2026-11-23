@@ -143,6 +143,7 @@
     channel.subscribe();
   }
   async function startApp() {
+    document.body.classList.remove("is-login");
     $("#loginForm").hidden = true; $("#app").hidden = false; $("#tabs").hidden = false; $("#who").hidden = false;
     showView("home");   // every login lands on Home
     try {
@@ -156,6 +157,7 @@
     if (channel) { sb.removeChannel(channel); channel = null; }
     Object.assign(S, { me: null, players: {}, phones: {}, events: [], rsvps: [], att: [], posts: [], loaded: false });
     $("#app").hidden = true; $("#tabs").hidden = true; $("#who").hidden = true; $("#loginForm").hidden = false; notice("");
+    document.body.classList.add("is-login");
   }
   sb.auth.onAuthStateChange((evt, session) => {
     const had = !!S.session; S.session = session;
