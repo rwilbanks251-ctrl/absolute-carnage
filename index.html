@@ -53,6 +53,8 @@ nav{display:flex;gap:2px;margin-top:4px;overflow-x:auto;scrollbar-width:none;jus
 nav::-webkit-scrollbar{display:none}
 nav button{background:none;border:0;color:#a39aa8;font-family:var(--f-cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 12px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
 nav button[aria-selected="true"]{color:var(--band-ink);border-bottom-color:var(--carnage)}
+nav .navlink{color:var(--orange);font-family:var(--f-cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 12px;white-space:nowrap;text-decoration:none;border-bottom:3px solid transparent}
+nav .navlink:hover{border-bottom-color:var(--orange)}
 nav button .n{font-variant-numeric:tabular-nums;color:var(--orange);margin-left:6px}
 
 main .wrap{padding-block:22px 48px}
@@ -278,6 +280,7 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
       <button role="tab" aria-selected="false" data-view="bulletin">Bulletin<span class="n" id="nPosts"></span></button>
       <button role="tab" aria-selected="false" data-view="attendance">Attendance</button>
       <button role="tab" aria-selected="false" data-view="roster">Roster<span class="n" id="nRoster"></span></button>
+      <a class="navlink" href="https://rwilbanks251-ctrl.github.io/baller-buzzer/" target="_blank" rel="noopener">Buzzer ↗</a>
     </nav>
   </div>
 </header>
