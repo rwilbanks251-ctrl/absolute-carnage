@@ -177,47 +177,23 @@ table.rec tr:last-child td{border-bottom:0}
 .tile span{font-size:13px;color:var(--muted)}
 .tile.paint b{color:var(--carnage)}
 
-/* animated weather tile */
-.tile.wx{position:relative;overflow:hidden;color:#fff;min-height:104px;isolation:isolate}
+/* weather tile: slow blurred colour field, tinted by the forecast */
+.tile.wx{position:relative;overflow:hidden;min-height:104px;isolation:isolate;color:#fff;background:var(--wx-base)}
 .tile.wx > *{position:relative;z-index:2}
-.tile.wx small{color:rgba(255,255,255,.8)}
-.tile.wx b{font-size:28px;text-shadow:0 1px 6px rgba(0,0,0,.35)}
-.tile.wx span{color:rgba(255,255,255,.92)}
-.tile.wx::before,.tile.wx::after{content:"";position:absolute;pointer-events:none;z-index:1}
-/* sun */
-.wx-sun{background:linear-gradient(135deg,#f7b733,#e86a17)}
-.wx-sun::before{width:220px;height:220px;right:-70px;top:-80px;border-radius:50%;
-  background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.28) 0 6deg,transparent 6deg 20deg);animation:wxspin 24s linear infinite}
-.wx-sun::after{width:90px;height:90px;right:-10px;top:-20px;border-radius:50%;background:radial-gradient(circle,#fff6c9 0 35%,rgba(255,236,150,.6) 36% 60%,transparent 62%);animation:wxpulse 4s ease-in-out infinite}
-/* clouds */
-.wx-cloud{background:linear-gradient(180deg,#6a7c90,#41505f)}
-.wx-cloud::before,.wx-cloud::after{width:180px;height:60px;top:14px;left:-190px;border-radius:40px;
-  background:radial-gradient(circle at 30% 60%,rgba(255,255,255,.55) 0 22px,transparent 23px),radial-gradient(circle at 55% 40%,rgba(255,255,255,.55) 0 28px,transparent 29px),radial-gradient(circle at 78% 62%,rgba(255,255,255,.5) 0 20px,transparent 21px);
-  animation:wxdrift 18s linear infinite}
-.wx-cloud::after{top:52px;opacity:.6;transform:scale(.8);animation-duration:26s;animation-delay:-9s}
-/* rain */
-.wx-rain{background:linear-gradient(180deg,#2b4466,#16253a)}
-.wx-rain::before{inset:-40px 0 0 0;background:repeating-linear-gradient(105deg,transparent 0 10px,rgba(173,210,255,.45) 10px 11px,transparent 11px 22px);
-  background-size:44px 44px;animation:wxfall .5s linear infinite}
-/* snow */
-.wx-snow{background:linear-gradient(180deg,#5b7394,#34465f)}
-.wx-snow::before{inset:-60px 0 0 0;background-image:radial-gradient(circle,#fff 0 2px,transparent 3px),radial-gradient(circle,rgba(255,255,255,.8) 0 1.5px,transparent 2.5px);
-  background-size:36px 36px,22px 22px;background-position:0 0,11px 7px;animation:wxsnow 6s linear infinite}
-/* storm */
-.wx-storm{background:linear-gradient(180deg,#2c2440,#141020)}
-.wx-storm::before{inset:-40px 0 0 0;background:repeating-linear-gradient(105deg,transparent 0 9px,rgba(190,180,255,.4) 9px 10px,transparent 10px 20px);background-size:40px 40px;animation:wxfall .4s linear infinite}
-.wx-storm::after{inset:0;background:rgba(235,230,255,.9);opacity:0;animation:wxflash 5s infinite}
-/* fog */
-.wx-fog{background:linear-gradient(180deg,#8a939c,#5d666f)}
-.wx-fog::before,.wx-fog::after{left:-50%;width:200%;height:28px;border-radius:20px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);top:22px;animation:wxfog 9s ease-in-out infinite alternate}
-.wx-fog::after{top:62px;animation-duration:12s;animation-direction:alternate-reverse}
-@keyframes wxspin{to{transform:rotate(360deg)}}
-@keyframes wxpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-@keyframes wxdrift{to{transform:translateX(560px)}}
-@keyframes wxfall{to{background-position:-12px 44px}}
-@keyframes wxsnow{to{background-position:18px 72px,-11px 50px}}
-@keyframes wxflash{0%,88%,100%{opacity:0}89%{opacity:.75}90%{opacity:0}92%{opacity:.5}93%{opacity:0}}
-@keyframes wxfog{from{transform:translateX(-12%)}to{transform:translateX(12%)}}
+.tile.wx small{color:rgba(255,255,255,.72)}
+.tile.wx b{font-size:30px;font-weight:600;letter-spacing:-.01em}
+.tile.wx span{color:rgba(255,255,255,.86)}
+.tile.wx::before,.tile.wx::after{content:"";position:absolute;z-index:1;pointer-events:none;border-radius:50%;filter:blur(28px);opacity:.85}
+.tile.wx::before{width:150px;height:150px;left:-40px;top:-50px;background:var(--wx-a);animation:wxglow1 16s ease-in-out infinite alternate}
+.tile.wx::after{width:170px;height:170px;right:-60px;bottom:-80px;background:var(--wx-b);animation:wxglow2 20s ease-in-out infinite alternate}
+.wx-sun  {--wx-base:#c2561a;--wx-a:#ffb347;--wx-b:#ff6a3d}
+.wx-cloud{--wx-base:#3f4b59;--wx-a:#7f93a8;--wx-b:#56657a}
+.wx-rain {--wx-base:#18283d;--wx-a:#2f6fb5;--wx-b:#1d4f86}
+.wx-snow {--wx-base:#40536e;--wx-a:#b9d4f2;--wx-b:#7c9cc4}
+.wx-storm{--wx-base:#1b1528;--wx-a:#6a4fc4;--wx-b:#3a2a78}
+.wx-fog  {--wx-base:#5c656e;--wx-a:#aab3bb;--wx-b:#7d868f}
+@keyframes wxglow1{to{transform:translate(70px,40px) scale(1.15)}}
+@keyframes wxglow2{to{transform:translate(-80px,-30px) scale(.9)}}
 @media (prefers-reduced-motion:reduce){.tile.wx::before,.tile.wx::after{animation:none}}
 
 /* login */
@@ -228,11 +204,11 @@ body.is-login main .wrap{min-height:100dvh;display:flex;flex-direction:column;ju
 body.is-login .bglogo{display:block;position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .bglogo::before{content:"";position:absolute;left:50%;top:50%;width:min(130vw,900px);aspect-ratio:1;
   background:url("logo.png") center/contain no-repeat;opacity:.7;filter:saturate(1.15);
-  transform:translate(-50%,-50%);animation:float 14s ease-in-out infinite}
+  transform:translate(-50%,-50%);animation:float 18s ease-in-out infinite}
 .bglogo::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(11,9,12,0) 45%,rgba(11,9,12,.7) 95%)}
 @keyframes float{
-  0%,100%{transform:translate(-50%,-50%) rotate(-3deg) scale(1)}
-  50%{transform:translate(-50%,-54%) rotate(2deg) scale(1.04)}}
+  0%,100%{transform:translate(-50%,-50%)}
+  50%{transform:translate(-50%,-52%)}}
 @media (prefers-reduced-motion:reduce){.bglogo::before{animation:none}}
 body.is-login main{position:relative;z-index:1}
 .login{max-width:380px;width:100%;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px}
@@ -429,8 +405,8 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
   <div class="dactions"><button type="button" class="btn ghost" id="meOut">Log out</button><div class="spacer"></div><button type="button" class="btn ghost" data-close>Close</button><button type="submit" class="btn" id="meSave">Change password</button></div>
 </form></dialog>
 
-<script src="config.js?v=7"></script>
+<script src="config.js?v=8"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
