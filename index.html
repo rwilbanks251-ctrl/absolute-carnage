@@ -36,17 +36,18 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 .band{background:var(--band);color:var(--band-ink);position:relative;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
 .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.band .wrap{padding-block:22px 0;position:relative;z-index:1}
-.brand{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.band .wrap{padding-block:12px 0;position:relative;z-index:1}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
 h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,6vw,52px);line-height:.95;margin:0;letter-spacing:.02em}
 h1 span{color:var(--carnage)}
 .brandmark{display:flex;align-items:center;gap:12px;min-width:0}
-.logo{height:88px;width:auto;max-width:60vw;display:block;border-radius:8px}
+.logo{height:72px;width:auto;max-width:50vw;display:block}
 .tag{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:#a39aa8;margin-top:6px}
 .who{display:flex;align-items:center;gap:10px;font-family:var(--f-cond);font-size:15px;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:999px;max-width:100%;border:0;color:inherit;cursor:pointer}
 .who b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .who .role{font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:var(--orange)}
-nav{display:flex;gap:4px;margin-top:20px;overflow-x:auto}
+nav{display:flex;gap:2px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
 nav button{background:none;border:0;color:#a39aa8;font-family:var(--f-cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 12px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
 nav button[aria-selected="true"]{color:var(--band-ink);border-bottom-color:var(--carnage)}
 nav button .n{font-variant-numeric:tabular-nums;color:var(--orange);margin-left:6px}
@@ -221,10 +222,7 @@ label > input,label > select,label > textarea{font-family:var(--f-body);text-tra
     <div class="brand">
       <div class="brandmark">
         <img src="logo.png" alt="Absolute Carnage" class="logo" id="logo" onerror="this.hidden=true;document.getElementById('wordmark').hidden=false">
-        <div>
-          <h1 id="wordmark" hidden>ABSOLUTE <span>CARNAGE</span></h1>
-          <div class="tag">Paintball team hub</div>
-        </div>
+        <h1 id="wordmark" hidden>ABSOLUTE <span>CARNAGE</span></h1>
       </div>
       <button class="who" id="who" hidden aria-label="My account"><b id="whoName"></b><span class="role" id="whoRole"></span></button>
     </div>
