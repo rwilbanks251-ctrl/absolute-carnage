@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1d1a1f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Carnage">
+<title>Absolute Carnage</title>
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: phone-first team board. Stencil wordmark over a paint-splatter band, four tabs, cards that go two-up on wide screens. */
+:root{
+  --bg:#f3f1ee; --surface:#ffffff; --surface-2:#ebe7e2; --ink:#1d1a1f; --muted:#6b6470; --line:#d9d3cc;
+  --carnage:#c8102e; --carnage-ink:#ffffff; --orange:#e86a17; --green:#1f8a4c; --amber:#b7791f; --red:#c8102e;
+  --band:#1d1a1f; --band-ink:#f3f1ee;
+  --f-display:"Black Ops One","Impact","Arial Black",sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-cond:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#141216; --surface:#1e1b21; --surface-2:#28242c; --ink:#efeaf0; --muted:#a39aa8; --line:#3a343f;
+  --carnage:#ff3b55; --carnage-ink:#140a0c; --orange:#ff8a3d; --green:#4cc581; --amber:#e6ad4f; --red:#ff5a6e;
+  --band:#0c0a0d; --band-ink:#efeaf0; color-scheme:dark}}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+
+.band{background:var(--band);color:var(--band-ink);position:relative;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
+.band::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.9;
+  background:
+    radial-gradient(circle at 88% 30%,var(--carnage) 0 26px,transparent 27px),
+    radial-gradient(circle at 93% 62%,var(--carnage) 0 9px,transparent 10px),
+    radial-gradient(circle at 81% 70%,var(--carnage) 0 5px,transparent 6px),
+    radial-gradient(circle at 97% 18%,var(--carnage) 0 4px,transparent 5px),
+    radial-gradient(ellipse 60px 8px at 78% 46%,var(--carnage) 0 99%,transparent 100%),
+    radial-gradient(circle at 72% 22%,var(--orange) 0 6px,transparent 7px),
+    radial-gradient(circle at 75% 85%,var(--orange) 0 3px,transparent 4px)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.band .wrap{padding-block:22px 0;position:relative;z-index:1}
+.brand{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,6vw,52px);line-height:.95;margin:0;letter-spacing:.02em}
+h1 span{color:var(--carnage)}
+.brandmark{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{height:88px;width:auto;max-width:60vw;display:block;border-radius:8px}
+.tag{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:#a39aa8;margin-top:6px}
+.who{display:flex;align-items:center;gap:10px;font-family:var(--f-cond);font-size:15px;background:rgba(255,255,255,.08);padding:6px 12px;border-radius:999px;max-width:100%;border:0;color:inherit;cursor:pointer}
+.who b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who .role{font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:var(--orange)}
+nav{display:flex;gap:4px;margin-top:20px;overflow-x:auto}
+nav button{background:none;border:0;color:#a39aa8;font-family:var(--f-cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;padding:10px 14px 12px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--band-ink);border-bottom-color:var(--carnage)}
+nav button .n{font-variant-numeric:tabular-nums;color:var(--orange);margin-left:6px}
+
+main .wrap{padding-block:22px 48px}
+.notice{border:1px dashed var(--line);background:var(--surface);padding:12px 14px;border-radius:8px;color:var(--muted);margin-bottom:16px}
+.notice[data-kind="warn"]{border-color:var(--amber);color:var(--ink)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:8px;padding:3px}
+.seg button{border:0;background:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-family:var(--f-cond);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.spacer{flex:1}
+.btn{border:0;border-radius:8px;padding:11px 16px;cursor:pointer;font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px;background:var(--carnage);color:var(--carnage-ink);text-decoration:none;display:inline-block;text-align:center}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.btn.small{padding:6px 10px;font-size:12px}
+.btn.wide{width:100%}
+.btn:disabled{opacity:.5;cursor:default}
+.linkbtn{background:none;border:0;color:var(--muted);cursor:pointer;font-size:13px;padding:4px;text-decoration:underline}
+
+h2{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:14px;color:var(--muted);margin:26px 0 10px}
+h2:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:14px}
+
+.event{background:var(--surface);border:1px solid var(--line);border-radius:10px;display:grid;grid-template-columns:72px 1fr;overflow:hidden;min-width:0}
+.event.past{opacity:.7}
+.date{background:var(--surface-2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 4px;border-right:4px solid var(--orange);text-align:center}
+.event[data-type="tournament"] .date{border-right-color:var(--carnage)}
+.date .mo{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--muted)}
+.date .d{font-family:var(--f-display);font-size:32px;line-height:1}
+.date .wd{font-family:var(--f-cond);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.ebody{padding:12px 14px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.etop{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--orange)}
+.pill.t{color:var(--carnage)}
+.when{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.etitle{font-weight:700;font-size:17px;margin:0;overflow-wrap:anywhere}
+.meta{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.notes{font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.maprow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.maplabel{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--carnage);min-width:36px}
+.mapbtn{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:12px;text-decoration:none;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+.rsvp{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.rsvp button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;cursor:pointer;font-family:var(--f-cond);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:13px}
+.rsvp button:disabled{cursor:default;opacity:.6}
+.rsvp button[data-v="in"][aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+.rsvp button[data-v="out"][aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.tally{font-family:var(--f-cond);font-size:14px;font-variant-numeric:tabular-nums;display:flex;gap:12px;flex-wrap:wrap}
+.tally .g{color:var(--green)} .tally .a{color:var(--amber)} .tally .r{color:var(--red)}
+details.att summary{cursor:pointer;font-size:13px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;background:var(--surface-2);border-radius:999px;padding:2px 10px;max-width:100%}
+.chip .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eactions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap;align-items:center}
+.reason{display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex-basis:100%}
+.reason input{flex:1 1 200px;min-width:0;width:auto}
+.reason-text{flex-basis:100%;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+
+.post{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.post.pinned{border-color:var(--carnage);box-shadow:inset 4px 0 0 var(--carnage)}
+.phead .nm{font-weight:700}
+.phead .tm{font-size:12px;color:var(--muted)}
+.ptext{white-space:pre-wrap;overflow-wrap:anywhere}
+.compose{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+textarea,input,select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:11px 12px;width:100%;font-size:16px}
+textarea{min-height:80px;resize:vertical}
+
+.player{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.player.admin{box-shadow:inset 4px 0 0 var(--orange)}
+.player .pn{font-weight:700;font-size:17px;overflow-wrap:anywhere}
+.player .pp{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.player .pa{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;align-items:center}
+.roletag{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:var(--orange);margin-left:6px}
+.warnline{font-size:12px;color:var(--amber)}
+.attpct{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.attpct b{font-family:var(--f-cond);font-size:18px;color:var(--ink)}
+.attpct.good b{color:var(--green)} .attpct.mid b{color:var(--amber)} .attpct.low b{color:var(--red)}
+.pb{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;align-items:stretch}
+.pb .stat{background:var(--surface-2);border-radius:8px;padding:4px 10px;display:flex;flex-direction:column;min-width:64px}
+.pb .stat small{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.08em;font-size:10px;color:var(--muted)}
+.pb .stat b{font-family:var(--f-cond);font-size:17px}
+.pbbtn{align-self:center;font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:13px;text-decoration:none;color:var(--carnage-ink);background:var(--carnage);border-radius:8px;padding:8px 12px}
+
+.atthead{min-width:0}
+.attkicker{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--carnage)}
+.atttitle{font-family:var(--f-display);font-size:22px;line-height:1.1;overflow-wrap:anywhere}
+.attother{margin:-6px 0 14px;font-size:13px;color:var(--muted)}
+.attother summary{cursor:pointer;width:max-content}
+.attsum{margin-bottom:12px}
+.attrow{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.attrow .who2{display:flex;align-items:baseline;gap:10px;min-width:0;flex:1 1 200px;flex-wrap:wrap}
+.attrow .rs{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.marks{display:flex;gap:6px;flex-wrap:wrap}
+.marks button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;cursor:pointer;font-family:var(--f-cond);font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:13px}
+.marks button[data-m="present"][aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+.marks button[data-m="tardy"][aria-pressed="true"]{background:var(--amber);border-color:var(--amber);color:#fff}
+.marks button[data-m="absent"][aria-pressed="true"]{background:var(--muted);border-color:var(--muted);color:var(--surface)}
+.marks button[data-m="ncns"][aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.mark-badge{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:13px;padding:4px 10px;border-radius:8px;background:var(--surface-2)}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table.rec{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:14px}
+table.rec th,table.rec td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+table.rec th:first-child,table.rec td:first-child{text-align:left}
+table.rec th{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:var(--muted)}
+table.rec tr:last-child td{border-bottom:0}
+
+.empty{text-align:center;padding:36px 16px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:10px}
+.empty b{display:block;color:var(--ink);font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+
+/* home */
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.hero .htop{background:var(--band);color:var(--band-ink);padding:14px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.hero .kick{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--orange)}
+.hero .htitle{font-family:var(--f-display);font-size:clamp(22px,5vw,30px);line-height:1.05;overflow-wrap:anywhere}
+.hero .hwhen{font-family:var(--f-cond);font-size:17px;font-variant-numeric:tabular-nums;color:#d8d2da}
+.hero .count{font-family:var(--f-display);font-size:34px;line-height:1;color:var(--carnage)}
+.hero .hbody{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.tile{background:var(--surface-2);border-radius:10px;padding:10px 12px;min-width:0}
+.tile small{display:block;font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--muted)}
+.tile b{display:block;font-family:var(--f-cond);font-size:24px;line-height:1.15;font-variant-numeric:tabular-nums}
+.tile span{font-size:13px;color:var(--muted)}
+.tile.paint b{color:var(--carnage)}
+
+/* login */
+.login{max-width:380px;margin:40px auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.login h3{font-family:var(--f-display);font-weight:400;font-size:24px;margin:0}
+
+dialog{border:0;border-radius:12px;padding:0;width:min(520px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(10,8,12,.55)}
+dialog form{padding:18px;display:flex;flex-direction:column;gap:12px}
+dialog h3{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:flex;flex-direction:column;gap:4px;font-family:var(--f-cond);font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:var(--muted)}
+label > input,label > select,label > textarea{font-family:var(--f-body);text-transform:none;letter-spacing:0;color:var(--ink)}
+.inline{display:flex;gap:8px}
+.inline input{flex:1;min-width:0}
+.formerr{color:var(--red);font-size:13px;min-height:1em}
+.dactions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.confirm{display:inline-flex;gap:6px;align-items:center;font-size:13px;flex-wrap:wrap}
+.sectionhead{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--carnage);border-top:1px solid var(--line);padding-top:10px}
+.loginbox{background:var(--surface-2);border-radius:10px;padding:12px;font-size:15px;display:flex;flex-direction:column;gap:4px;overflow-wrap:anywhere}
+.loginbox b{font-family:var(--f-cond);letter-spacing:.04em}
+@media (max-width:480px){.row{grid-template-columns:1fr}.event{grid-template-columns:60px 1fr}}
+@media (prefers-reduced-motion:no-preference){.btn,.rsvp button,nav button,.marks button{transition:background-color .15s,color .15s,border-color .15s}}
+</style>
+</head>
+<body>
+
+<header class="band">
+  <div class="wrap">
+    <div class="brand">
+      <div class="brandmark">
+        <img src="logo.png" alt="Absolute Carnage" class="logo" id="logo" onerror="this.hidden=true;document.getElementById('wordmark').hidden=false">
+        <div>
+          <h1 id="wordmark" hidden>ABSOLUTE <span>CARNAGE</span></h1>
+          <div class="tag">Paintball team hub</div>
+        </div>
+      </div>
+      <button class="who" id="who" hidden aria-label="My account"><b id="whoName"></b><span class="role" id="whoRole"></span></button>
+    </div>
+    <nav role="tablist" aria-label="Sections" id="tabs" hidden>
+      <button role="tab" aria-selected="true" data-view="home">Home</button>
+      <button role="tab" aria-selected="false" data-view="schedule">Schedule<span class="n" id="nSched"></span></button>
+      <button role="tab" aria-selected="false" data-view="bulletin">Bulletin<span class="n" id="nPosts"></span></button>
+      <button role="tab" aria-selected="false" data-view="attendance">Attendance</button>
+      <button role="tab" aria-selected="false" data-view="roster">Roster<span class="n" id="nRoster"></span></button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div id="notice" class="notice" hidden></div>
+
+    <form class="login" id="loginForm" hidden>
+      <h3>Log in</h3>
+      <label for="liUser">Username<input id="liUser" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+      <label for="liPass">Password<input id="liPass" type="password" autocomplete="current-password" required></label>
+      <div class="formerr" id="liErr"></div>
+      <button class="btn wide" type="submit" id="liBtn">Log in</button>
+      <div class="meta">Forgot your password? Ask Kevin, Mike or Rob to reset it.</div>
+    </form>
+
+    <div id="app" hidden>
+      <section id="view-home">
+        <div id="home"></div>
+      </section>
+
+      <section id="view-schedule" hidden>
+        <div class="toolbar">
+          <div class="seg" role="group" aria-label="Event type">
+            <button type="button" aria-pressed="true" data-f="all">All</button>
+            <button type="button" aria-pressed="false" data-f="practice">Practices</button>
+            <button type="button" aria-pressed="false" data-f="tournament">Tournaments</button>
+          </div>
+          <div class="spacer"></div>
+          <button class="btn" id="addEvent" hidden>+ Add event</button>
+        </div>
+        <div id="schedule"></div>
+      </section>
+
+      <section id="view-bulletin" hidden>
+        <div class="compose">
+          <label for="postText">Post to the team</label>
+          <textarea id="postText" maxlength="2000" placeholder="Field change, carpool, paint order, who's bringing the pop-up tent&hellip;"></textarea>
+          <div class="toolbar" style="margin:0"><span class="formerr" id="postErr"></span><div class="spacer"></div><button class="btn" id="postBtn">Post</button></div>
+        </div>
+        <div id="posts"></div>
+      </section>
+
+      <section id="view-attendance" hidden>
+        <div class="toolbar">
+          <div class="atthead"><div class="attkicker" id="attKicker">Today</div><div class="atttitle" id="attTitle"></div></div>
+          <div class="spacer"></div>
+          <button class="btn ghost" id="attAll" hidden>Mark unmarked present</button>
+        </div>
+        <details class="attother" id="attOther" hidden>
+          <summary>Fix a different event</summary>
+          <label for="attEvent" style="margin-top:8px">Event<select id="attEvent"></select></label>
+        </details>
+        <div id="attSummary" class="tally attsum"></div>
+        <div id="attList"></div>
+        <h2>Season record</h2>
+        <div id="attRecord"></div>
+      </section>
+
+      <section id="view-roster" hidden>
+        <div class="toolbar"><div class="spacer"></div><button class="btn" id="addPlayer" hidden>+ Add player</button></div>
+        <div id="roster"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- add / edit event -->
+<dialog id="eventDlg"><form id="eventForm">
+  <h3 id="eventDlgTitle">Add event</h3>
+  <div class="row">
+    <label for="evType">Type<select id="evType"><option value="practice">Practice</option><option value="tournament">Tournament</option></select></label>
+    <label for="evTitle">Title<input id="evTitle" maxlength="80" placeholder="Sunday practice" required></label>
+  </div>
+  <div class="row">
+    <label for="evDate">Date<input id="evDate" type="date" required></label>
+    <label for="evTime">Start time<input id="evTime" type="time"></label>
+  </div>
+  <label for="evField" id="evFieldWrap">Practice field<select id="evField">
+    <option value="wellford">PBC Wellford</option>
+    <option value="greensboro">PBC Greensboro</option>
+    <option value="palmetto">Palmetto Hills (Rock Hill)</option>
+    <option value="other">Somewhere else</option>
+  </select></label>
+  <label for="evLoc" id="evLocWrap">Field address<input id="evLoc" maxlength="160" placeholder="Field name and address"></label>
+  <label for="evStay">Airbnb / hotel address<input id="evStay" maxlength="160" placeholder="Where the team is staying (optional)"></label>
+  <label for="evStayUrl">Booking link<input id="evStayUrl" maxlength="300" inputmode="url" placeholder="https://airbnb.com/… (optional)"></label>
+  <label for="evPaint" id="evPaintWrap">Cases of paint to buy<input id="evPaint" type="number" min="0" max="500" step="1" inputmode="numeric" placeholder="4"></label>
+  <label for="evNotes">Notes<textarea id="evNotes" maxlength="1000" placeholder="Arrival time, entry fee, paint limits, gear to bring"></textarea></label>
+  <div class="formerr" id="evErr"></div>
+  <div class="dactions"><button type="button" class="btn ghost" data-close>Cancel</button><button type="submit" class="btn" id="evSave">Save event</button></div>
+</form></dialog>
+
+<!-- add / edit player -->
+<dialog id="plDlg"><form id="plForm">
+  <h3 id="plDlgTitle">Add player</h3>
+  <label for="plName">Name<input id="plName" maxlength="40" placeholder="First and last name"></label>
+  <div id="plLoginFields">
+    <div class="sectionhead">Login</div>
+    <div class="row" style="margin-top:10px">
+      <label for="plUser">Username<input id="plUser" maxlength="30" autocapitalize="none" spellcheck="false" autocomplete="off" placeholder="mikeh"></label>
+      <label for="plPass">Starting password<span class="inline"><input id="plPass" maxlength="72" autocomplete="new-password" spellcheck="false"><button type="button" class="btn ghost small" id="plGen">New</button></span></label>
+    </div>
+  </div>
+  <div class="row">
+    <label for="plPhone" id="plPhoneWrap">Cellphone<input id="plPhone" type="tel" maxlength="20" inputmode="tel" autocomplete="off" placeholder="864-555-0123"></label>
+    <label for="plPbId">PBLeagues ID<input id="plPbId" maxlength="12" inputmode="numeric" placeholder="1234-5678"></label>
+  </div>
+  <div class="row">
+    <label for="plPbClass">PBLeagues class<input id="plPbClass" maxlength="20" placeholder="D4"></label>
+    <label for="plRole" id="plRoleWrap">Role<select id="plRole"><option value="player">Player</option><option value="admin">Admin</option></select></label>
+  </div>
+  <label for="plPbUrl">PBLeagues profile link<input id="plPbUrl" maxlength="300" inputmode="url" placeholder="https://pbleagues.com/… (optional)"></label>
+  <div class="formerr" id="plErr"></div>
+  <div class="dactions"><button type="button" class="btn ghost" data-close>Cancel</button><button type="submit" class="btn" id="plSave">Save</button></div>
+</form></dialog>
+
+<!-- create login for an existing roster spot / reset password -->
+<dialog id="pwDlg"><form id="pwForm">
+  <h3 id="pwTitle">Create login</h3>
+  <div class="meta" id="pwFor"></div>
+  <label for="pwUser" id="pwUserWrap">Username<input id="pwUser" maxlength="30" autocapitalize="none" spellcheck="false" autocomplete="off"></label>
+  <label for="pwPass">Starting password<span class="inline"><input id="pwPass" maxlength="72" autocomplete="new-password" spellcheck="false"><button type="button" class="btn ghost small" id="pwGen">New</button></span></label>
+  <label for="pwPhone" id="pwPhoneWrap">Cellphone<input id="pwPhone" type="tel" maxlength="20" inputmode="tel" autocomplete="off"></label>
+  <div class="formerr" id="pwErr"></div>
+  <div class="dactions"><button type="button" class="btn ghost" data-close>Cancel</button><button type="submit" class="btn" id="pwSave">Save</button></div>
+</form></dialog>
+
+<!-- text the login info -->
+<dialog id="txDlg"><form id="txForm">
+  <h3>Send their login</h3>
+  <div class="loginbox" id="txBox"></div>
+  <a class="btn wide" id="txSms" href="#">Text login info</a>
+  <div class="meta" id="txNote">Opens Messages on your phone with the text written out. You just hit Send.</div>
+  <div class="dactions"><button type="button" class="btn ghost" id="txCopy">Copy text</button><button type="button" class="btn ghost" data-close>Done</button></div>
+</form></dialog>
+
+<!-- my account -->
+<dialog id="meDlg"><form id="meForm">
+  <h3>My account</h3>
+  <div class="meta" id="meWho"></div>
+  <label for="meNew">New password<input id="meNew" type="password" autocomplete="new-password" minlength="8"></label>
+  <label for="meNew2">New password again<input id="meNew2" type="password" autocomplete="new-password" minlength="8"></label>
+  <div class="formerr" id="meErr"></div>
+  <div class="dactions"><button type="button" class="btn ghost" id="meOut">Log out</button><div class="spacer"></div><button type="button" class="btn ghost" data-close>Close</button><button type="submit" class="btn" id="meSave">Change password</button></div>
+</form></dialog>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
